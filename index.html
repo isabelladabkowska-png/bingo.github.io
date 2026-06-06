@@ -75,7 +75,8 @@ body{
     }
 
     #title{
-        margin-top:38vh;
+        margin-top:28vh;
+        margin-top:28svh;
     }
 
     #undertitle{
@@ -84,7 +85,8 @@ body{
     }
 
     #timer{
-        margin-top:5vh;
+        margin-top:4vh;
+        margin-top:4svh;
         font-size:clamp(54px, 16.5vw, 84px);
         letter-spacing:clamp(2px, 1vw, 5px);
     }
@@ -98,3 +100,77 @@ body{
     #timer{
         font-size:clamp(50px, 15.5vw, 60px);
     }
+}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div id="title"></div>
+    <div id="undertitle">【SPILLET ER I FERD MED Å BEGYNNE】</div>
+    <div id="timer">00:30</div>
+</div>
+
+<script>
+let phase = 1;
+let remaining = 30;
+
+const titleEl = document.getElementById("title");
+const undertitleEl = document.getElementById("undertitle");
+const timerEl = document.getElementById("timer");
+
+function formatTime(seconds){
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function updateTimer(){
+    timerEl.textContent = formatTime(Math.max(0, remaining));
+
+    // Vis 00:00 i ett helt sekund
+    if (remaining === 0){
+        remaining = -1;
+        return;
+    }
+
+    if (remaining === -1){
+
+        if (phase === 1){
+            phase = 2;
+            remaining = 30;
+            titleEl.textContent = "【Spill】";
+            undertitleEl.textContent = "BINGO";
+            timerEl.textContent = formatTime(remaining);
+            remaining--;
+            return;
+        }
+
+        if (phase === 2){
+            phase = 3;
+            remaining = 30;
+            titleEl.textContent = "";
+            undertitleEl.textContent = "【FORFLYTT TIL NESTE ROM...】";
+            timerEl.textContent = formatTime(remaining);
+            remaining--;
+            return;
+        }
+
+        phase = 1;
+        remaining = 30;
+        titleEl.textContent = "";
+        undertitleEl.textContent = "【SPILLET ER I FERD MED Å BEGYNNE】";
+        timerEl.textContent = formatTime(remaining);
+        remaining--;
+        return;
+    }
+
+    remaining--;
+}
+
+updateTimer();
+let loop = setInterval(updateTimer, 1000);
+</script>
+
+</body>
+</html>

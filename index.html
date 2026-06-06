@@ -79,6 +79,14 @@ body{
         margin-top:28svh;
     }
 
+    #title,
+    #undertitle{
+        height:clamp(40px, 11.6vw, 62px);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
     #undertitle{
         margin-top:0;
         font-size:clamp(16px, 4.55vw, 34px);
@@ -89,6 +97,12 @@ body{
         margin-top:4svh;
         font-size:clamp(54px, 16.5vw, 84px);
         letter-spacing:clamp(2px, 1vw, 5px);
+    }
+
+    body[data-phase="2"] #title,
+    body[data-phase="2"] #undertitle{
+        font-size:clamp(34px, 9.8vw, 52px);
+        line-height:1.18;
     }
 }
 
@@ -108,16 +122,21 @@ body{
 <div class="wrapper">
     <div id="title"></div>
     <div id="undertitle">【SPILLET ER I FERD MED Å BEGYNNE】</div>
-    <div id="timer">00:30</div>
+    <div id="timer">00:03</div>
 </div>
 
 <script>
 let phase = 1;
-let remaining = 30;
+let remaining = 3;
 
 const titleEl = document.getElementById("title");
 const undertitleEl = document.getElementById("undertitle");
 const timerEl = document.getElementById("timer");
+
+function setPhase(nextPhase){
+    phase = nextPhase;
+    document.body.dataset.phase = String(nextPhase);
+}
 
 function formatTime(seconds){
     const m = Math.floor((seconds % 3600) / 60);
@@ -137,8 +156,8 @@ function updateTimer(){
     if (remaining === -1){
 
         if (phase === 1){
-            phase = 2;
-            remaining = 30;
+            setPhase(2);
+            remaining = 3;
             titleEl.textContent = "【Spill】";
             undertitleEl.textContent = "BINGO";
             timerEl.textContent = formatTime(remaining);
@@ -147,8 +166,8 @@ function updateTimer(){
         }
 
         if (phase === 2){
-            phase = 3;
-            remaining = 30;
+            setPhase(3);
+            remaining = 3;
             titleEl.textContent = "";
             undertitleEl.textContent = "【FORFLYTT TIL NESTE ROM...】";
             timerEl.textContent = formatTime(remaining);
@@ -156,8 +175,8 @@ function updateTimer(){
             return;
         }
 
-        phase = 1;
-        remaining = 30;
+        setPhase(1);
+        remaining = 3;
         titleEl.textContent = "";
         undertitleEl.textContent = "【SPILLET ER I FERD MED Å BEGYNNE】";
         timerEl.textContent = formatTime(remaining);
@@ -169,6 +188,7 @@ function updateTimer(){
 }
 
 updateTimer();
+setPhase(phase);
 let loop = setInterval(updateTimer, 1000);
 </script>
 
